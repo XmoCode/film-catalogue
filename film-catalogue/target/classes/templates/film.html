@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="description" content="" />
+      <meta
+        name="author"
+        content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+      />
+      <meta name="generator" content="Hugo 0.88.1" />
+
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+        crossorigin="anonymous"
+      />
+
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"
+      ></script>
+
+      <title>Film</title>
+
+      <link
+        rel="canonical"
+        href="https://getbootstrap.com/docs/5.1/examples/jumbotron/"
+      />
+  
+      <style>
+ 
+        #star {
+          color: #ffe007;
+        }
+
+        .space-bottom {
+          margin-bottom: 30px;
+        }
+
+        .heading-top {
+          margin-top: 17px;
+        }
+
+        .p {
+          margin-bottom: 0em;
+          margin-top: 0em;
+        }
+
+        .pl {
+          padding-left: 1em;
+        }
+        .muted {
+          font-size: small;
+          font-weight: lighter;
+        }
+
+
+      </style>
+    </head>
+
+    <body>
+      <main>
+        <div class="container flex">
+          <header class="me-2 border-bottom">
+            <div
+              th:insert="components/nav-with-search :: nav-search-panel"
+            ></div>
+          </header>
+
+          <div class="py-2 mb-0 bg-light rounded-3">
+            <div class="container-fluid max-width">
+              <div class="card max-width">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      th:src="${film.imageUrl}"
+                      class="img-fluid rounded-start"
+                      alt="..."
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5
+                        class="card-title display-5"
+                        th:text="${film.filmTitle}"
+                      >
+                        Film
+                      </h5>
+
+                      <ul class="d-inline p-0">
+                        <li class="badge rounded-pill bg-dark">
+                          <span th:text="${film.titleType}"></span>
+                          <span class="text-info" th:text="${film.numberOfEpisodes}"></span>
+                        </li>
+
+                        <li class="badge bg-light text-dark">
+                          <span id="star">&bigstar;</span>
+                          <small th:text="${film.rating} + ' /10'"
+                            >rating</small
+                          >
+                        </li>
+                        <li class="badge bg-light text-dark">
+                          poll:
+                          <small
+                            th:text="${#numbers.formatInteger(film.ratingCount,3,'COMMA')}"
+                            >poll
+                          </small>
+                        </li>
+                      </ul>
+
+                      <p
+                        class="card-text heading-top space-bottom"
+                        th:text="${film.synopsis}"
+                      >
+                        Synopsis
+                      </p>
+
+                      <ul class="d-inline p-0" th:each="genre: ${film.genres}">
+                        <li
+                          class="badge rounded-pill bg-secondary"
+                          th:text="${genre}"
+                        >
+                          Genre
+                        </li>
+                      </ul>
+
+                      <div class="heading-top" th:if="${film.titleType}!='videoGame'">
+                        <div th:if="${film.plot}!='unknown'">
+                        <strong>Storyline </strong>
+                        <p class="text" th:text="${film.plot}">Plot</p>
+                        <p class="muted" th:text="' '+ ${film.runningTimeInMinutes} + ' min.'"
+                                  >Running time unknown.</p>
+                        </div>
+                      </div>
+
+
+                 
+                       <div class="text-info" style="margin-top: 10px;">Release date: 
+                        <small th:text="${film.releasedOn}"> not yet released </small>
+                       </div>
+     
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row align-items-md-stretch">
+            <div class="col-md-6">
+              <div class="h-100 p-4 text-white bg-dark rounded-3">
+                <h5>Credits</h5>
+                <p class="text-white text-decoration-underline p">Directors</p>
+                <p class="text-white p pl" th:text="${credits.director}"></p>
+                <p class="text-info bg-dark text-decoration-underline p">
+                  Writers
+                </p>
+                <p class="text-white p pl" th:text="${credits.writers}"></p>
+                <p class="text-warning bg-dark text-decoration-underline p">
+                  Stars
+                </p>
+                <p class="text-white p pl" th:text="${credits.stars}"></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-4 bg-light border rounded-3">
+                <h5>Add this film to catalogue</h5>
+
+                <div class="text" th:unless="${loginId}">
+                  <p>
+                    Login to enlist and rate film in your personal catalogue.
+                  </p>
+                  <a
+                    href="/oauth2/authorization/github"
+                    class="btn btn-outline-secondary"
+                    >Login via GitHub</a
+                  >
+                </div>
+
+                <form
+                  th:if="${loginId}"
+                  th:attr="action=@{/addUserFilm}"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"
+                  />
+
+                  <input type="hidden" name="filmId" th:value="${credits.id}" />
+
+                  <input
+                    type="hidden"
+                    name="title"
+                    th:value="${film.filmTitle}"
+                  />
+
+                  <input
+                    type="hidden"
+                    name="director"
+                    th:value="${credits.director}"
+                  />
+
+                  <input
+                    type="hidden"
+                    name="imageUrl"
+                    th:value="${film.imageUrl}"
+                  />
+
+                  <div class="mb-3 p">
+                    <label for="status" class="form-label p">Status</label>
+                    <select
+                      id="status"
+                      name="status"
+                      class="form-select form-select-sm"
+                      aria-label="Status"
+                      th:field="${userFilms.status}"
+                    >
+                      <option selected value="2">Status</option>
+                      <option value="0-planning to watch">
+                        Planning to watch
+                      </option>
+                      <option value="1-watched">Watched</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3 p">
+                    <label for="reaction" class="form-label p">Reaction</label>
+                    <select
+                      id="reaction"
+                      name="reaction"
+                      class="form-select form-select-sm"
+                      aria-label="My Reaction"
+                      th:field="${userFilms.reaction}"
+                    >
+                      <option selected value="">Select one</option>
+                      <option value="first-rate">first-rate</option>
+                      <option value="second-rate">second-rate</option>
+                      <option value="third-rate">third-rate</option>
+                      <option value="enjoyable">enjoyable</option>
+                      <option value="powerful">powerful</option>
+                      <option value="fascinating">fascinating</option>
+                      <option value="thought provoking">
+                        thought provoking
+                      </option>
+                      <option value="boring">boring</option>
+                      <option value="weak">weak</option>
+                      <option value="oddball">oddball</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3 p">
+                    <label for="rating" class="form-label p">Rating</label>
+                    <select
+                      id="rating"
+                      name="rating"
+                      class="form-select form-select-sm"
+                      aria-label="My Rating"
+                      th:field="${userFilms.rating}"
+                    >
+                      <option selected value="0">Select rating</option>
+                      <option value="1">&#9733;</option>
+                      <option value="2">&#9733;&#9733;</option>
+                      <option value="3">&#9733;&#9733;&#9733;</option>
+                      <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+                      <option value="5">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                      <option value="6">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                      <option value="7">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                      <option value="8">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                      <option value="9">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                      <option value="10">
+                        &#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn-sm btn-outline-secondary">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <footer class="pt-3 mt-4 text-muted border-top"></footer>
+        </div>
+      </main>
+    </body>
+  </html>
+</html>

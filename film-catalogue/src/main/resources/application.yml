@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: filmcatalogue
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Iv1.c7ddac2fd17e734a
+            client-secret: 4ea59814a739ddac8ea1e359bc444fab1b18e4ad
+  data:
+    cassandra:
+      keyspace-name: main
+      username: TlLHEZdHAkluPSCjgjTtBgdG
+      password: KxhCGgEAZNqDRoEHeBPEZLrtpcUOJBPrP-ILILXDgJrG4DHqJ-jMH+wlBRKYtt28wh3dJjje6G1,Bx7,RZ4cRs7g06Nrt2B+3C_.z_XgtcuJwlM646cWlk.w0.bpGLO6
+      schema-action: create-if-not-exists
+      request:
+        timeout: 10s
+      connection:
+        connect-timeout: 10s
+        init-query-timeout: 10s
+
+datastax.astra:
+  secure-connect-bundle: secure-connect.zip
+
+astra.db:
+  id: 6b996996-6b8d-484b-b2f2-269ee4765fbf-1
+  region: europe-west1
+  keyspace: main
+  application.token: AstraCS:TlLHEZdHAkluPSCjgjTtBgdG:c601a4cb47dbb58c113f8efb9f4749355845815b240953bf8be9cfb82190c930

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <title>Home</title>
+
+  <style>
+    #star {
+      color: #ffe007;
+    }
+
+    .heading-top {
+      margin-top: 13px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div th:insert="components/nav-home :: nav-search-panel"></div>
+  </header>
+
+  <main>
+
+    <section class="py-3 text-center container">
+
+      <div class="mx-auto">
+        <h1 class="fw-light">My Catalogue</h1>
+
+        <p class="lead text-muted"> Collection of films marked with personal ratings. Search for a title and add it to
+          catalogue.
+          To change status of listed film follow the link from individual card. </p>
+      </div>
+
+
+    </section>
+
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <div class="card mb-3 mx-auto" style="flex: 0 0 40%; margin: 35px;" th:each="film: ${films}">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img th:src="${film.imageUrl}" class="img-fluid rounded-start" alt="...">
+              </div>
+
+              <div class="col-md-8">
+                <div class="card-body">
+                  <div th:switch="${film.status}">
+                    <p th:case="'0-planning to watch'" class="text-end text-danger fw-bold">Watchlist </p>
+                    <p th:case="'1-watched'" class="text-end text-muted">Watched</p>
+                  </div>
+                  <h3 class="mb-0" th:text="${film.title}">Title</h3>
+                  <p class="card-text"><small th:text="${film.Directors}">Directors</small></p>
+
+                  <div th:switch="${film.reaction}">
+                    <p th:case="'first-rate'" class="badge bg-success">first-rate</p>
+                    <p th:case="'second-rate'" class="badge bg-warning text-dark">second-rate</p>
+                    <p th:case="'third-rate'" class="badge bg-danger">third-rate</p>
+                    <p th:case="'enjoyable'" class="badge bg-warning text-dark">enjoyable</p>
+                    <p th:case="'powerful'" class="badge bg-success">powerful</p>
+                    <p th:case="'fascinating'" class="badge bg-success">fascinating</p>
+                    <p th:case="'thought provoking'" class="badge bg-success">thought provoking</p>
+                    <p th:case="'boring'" class="badge bg-danger">boring</p>
+                    <p th:case="'weak'" class="badge bg-danger">weak</p>
+                    <p th:case="'oddball'" class="badge bg-warning text-dark">oddball</p>
+                  </div>
+
+                  <div class="badge bg-secondary" th:if="${film.rating} !='0'"> My rating:
+                    <small id="star">&bigstar;</small>
+                    <small th:text="${film.rating}">rating</small>
+                  </div>
+
+
+                  <div class="align-items-start heading-top">
+                    <a th:href="@{'/film/' + ${film.filmId}}" class="stretched-link text-info">View details or edit
+                      status</a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </main>
+
+  <footer class="text-muted py-5">
+    <div class="container">
+      <p class="float-end mb-1">
+        <a href="#">Back to top</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="nav-search-panel">
+        <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Film Catalogue</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="true"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarsExample02">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="navbar-expand-lg">
+                            <form action="search.html" th:attr="action=@{/search}">
+                                <div class="input-group mx-auto" style="width: 12cm;">
+                                    <input type="text" name="query" class="form-control"
+                                        placeholder="Search for a title" aria-label="Search query"
+                                        aria-describedby="button-addon2">
+                                    <button type="submit" class="btn btn-outline-info px-4 me-sm-3 fw-bold"
+                                        id="button-addon2">Search</button>
+                                </div>
+                            </form>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+</body>
+
+</html>
